@@ -44,6 +44,12 @@ module Imprint
     def self.rand_trace_id
       SecureRandom.uuid
     end
+
+    def self.initiate_trace_id(logger = nil)
+      trace_id = Imprint::Tracer.rand_trace_id
+      logger.info("trace_status=initiated trace_id=#{trace_id}") if logger && logger.respond_to?(:info)
+      Imprint::Tracer.set_trace_id(trace_id)
+    end
   end
 end
 
