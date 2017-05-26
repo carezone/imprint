@@ -9,7 +9,6 @@ if defined?(ActiveSupport::BufferedLogger)
           message = (message || (block && block.call) || progname).to_s
           # If a newline is necessary then create a new message ending with a newline.
           # Ensures that the original message is not mutated.
-          message = "#{message}\n" unless message[-1] == "\n"
           if defined?(Imprint::Tracer)
             Imprint::Tracer.insert_trace_id_in_message(message, ActiveSupport::BufferedLogger::Severity.constants[severity])
           end
@@ -22,7 +21,6 @@ if defined?(ActiveSupport::BufferedLogger)
           message = (message || (block && block.call) || progname).to_s
           # If a newline is necessary then create a new message ending with a newline.
           # Ensures that the original message is not mutated.
-          message = "#{message}\n" unless message[-1] == "\n"
           if defined?(Imprint::Tracer)
             Imprint::Tracer.insert_trace_id_in_message(message, ActiveSupport::BufferedLogger::Severity.constants[severity])
           end
@@ -41,7 +39,6 @@ if defined?(ActiveSupport::Logger::SimpleFormatter)
       message = (message || (block && block.call) || progname).to_s
       # If a newline is necessary then create a new message ending with a newline.
       # Ensures that the original message is not mutated.
-      message = "#{message}\n" unless message[-1] == "\n"
       if defined?(Imprint::Tracer)
         Imprint::Tracer.insert_trace_id_in_message(message, severity)
       end
@@ -53,7 +50,6 @@ if defined?(ActiveSupport::Logger::SimpleFormatter)
   class Logger::Formatter
     def call(severity, time, progname, msg)
       message = msg2str(msg)
-      message = "#{message}\n" unless message[-1] == "\n"
       if defined?(Imprint::Tracer)
         Imprint::Tracer.insert_trace_id_in_message(message, severity)
       end
