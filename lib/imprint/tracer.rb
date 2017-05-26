@@ -36,14 +36,19 @@ module Imprint
         trace_id = get_trace_id
 
         if trace_id && trace_id != TRACE_ID_DEFAULT
-          message.insert 0, "#{get_trace_timestamp} #{severity} "
-          message.gsub!("\n"," process_pid=#{get_pid} trace_id=#{trace_id}\n")
+          message << " process_pid=#{get_pid} trace_id=#{trace_id}"
         end
       end
     end
 
     def self.rand_trace_id
       SecureRandom.uuid
+    end
+
+    def self.initiate_trace_id(logger = nil)
+      trace_id = Imprint::Tracer.rand_trace_id
+      logger.info("trace_status=initiated trace_id=#{trace_id}") if logger && logger.respond_to?(:info)
+      Imprint::Tracer.set_trace_id(trace_id)
     end
   end
 end
