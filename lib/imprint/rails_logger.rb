@@ -58,3 +58,17 @@ if defined?(ActiveSupport::Logger::SimpleFormatter)
   end
 
 end
+
+if defined?(Syslog::Logger)
+  class Syslog::Logger
+    alias_method :original_add, :add
+
+    def add severity, message = nil, progname = nil, &block
+      msg = message || block.call
+      if defined?(Imprint::Tracer)
+        Imprint::Tracer.insert_trace_id_in_message(msg, severity)
+      end
+      original_add severity, msg, progname
+    end
+  end
+end
